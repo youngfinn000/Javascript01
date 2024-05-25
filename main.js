@@ -1,11 +1,12 @@
 // CLASS
+
 class Producto {
-constructor(id, nombre, precio, stock) {
+  constructor(id, nombre, precio, stock) {
     this.id = id;
     this.nombre = nombre;
     this.precio = precio;
     this.stock = stock;
-}
+  }
 }
 // Create some products
 const producto1 = new Producto(1, "ferne", 10000, 500);
@@ -17,9 +18,9 @@ const productos = [producto1, producto2, producto3, producto4];
 
 const contenedorProductos = document.getElementById("contenedorProductos");
 productos.forEach((producto) => {
-const divProducto = document.createElement("div");
-divProducto.classList.add("grid", "grid-cols-1", "md:grid-cols-2", "gap-4");
-divProducto.innerHTML = `
+  const divProducto = document.createElement("div");
+  divProducto.classList.add("grid", "grid-cols-1", "md:grid-cols-2", "gap-4");
+  divProducto.innerHTML = `
 <img src="src/assets/${producto.id}.jpg" class="w-full h-48 object-cover mb-4 rounded-lg md:h-auto">  <div class="text-center md:text-left">
     <h3 class="text-xl font-bold mb-2"> ${producto.nombre}</h3>
     <p class="text-gray-600"> $${producto.precio}</p>
@@ -31,46 +32,46 @@ divProducto.innerHTML = `
     </div>
     </div>
 `;
-contenedorProductos.appendChild(divProducto);
+  contenedorProductos.appendChild(divProducto);
 
   //Boton para agregar al carrito
-const boton = document.getElementById(`boton${producto.id}`);
-boton.addEventListener("click", () => {
+  const boton = document.getElementById(`boton${producto.id}`);
+  boton.addEventListener("click", () => {
     const cantidad = parseInt(
-    document.getElementById(`cantidad${producto.id}`).value
+      document.getElementById(`cantidad${producto.id}`).value
     );
     agregarAlCarrito(producto.id, cantidad);
-});
+  });
 });
 
 let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
 
 const agregarAlCarrito = (id, cantidad) => {
-const producto = productos.find((producto) => producto.id === id);
-if (producto.stock > 0) {
+  const producto = productos.find((producto) => producto.id === id);
+  if (producto.stock > 0) {
     const productoEnCarrito = carrito.find((producto) => producto.id === id);
     const cantidadMaxima = Math.min(cantidad, producto.stock); // obtener cantidad maxima
     if (productoEnCarrito) {
-    productoEnCarrito.cantidad += cantidadMaxima;
+      productoEnCarrito.cantidad += cantidadMaxima;
     } else {
-    carrito.push({ ...producto, cantidad: cantidadMaxima });
+      carrito.push({ ...producto, cantidad: cantidadMaxima });
     }
     producto.stock -= cantidadMaxima;
     actualizarCarrito();
     Swal.fire({
-    position: "center",
-    icon: "success",
-    title: "Producto agregado al carrito",
-    showConfirmButton: false,
-    timer: 1300,
+      position: "center",
+      icon: "success",
+      title: "Producto agregado al carrito",
+      showConfirmButton: false,
+      timer: 1300,
     });
-} else {
+  } else {
     Swal.fire({
-    icon: "error",
-    title: "Oops...",
-    text: "Lo sentimos, no hay mas stock de este producto.",
+      icon: "error",
+      title: "Oops...",
+      text: "Lo sentimos, no hay mas stock de este producto.",
     });
-}
+  }
 };
 
 //Carrito de compras
@@ -164,12 +165,12 @@ const calcularTotalCompra = () => {
     //Obtengo el precio actual en pesos argentinos
     let precioActual = producto.precio * producto.cantidad;
 
-      total += precioActual;
-      if (carrito.length === 0) {
-        totalCompra.innerHTML = "$ 0";
-      } else {
-        totalCompra.innerHTML = "$ " + total;
-      }
+    total += precioActual;
+    if (carrito.length === 0) {
+      totalCompra.innerHTML = "$ 0";
+    } else {
+      totalCompra.innerHTML = "$ " + total;
+    }
   });
   if (carrito.length === 0) {
     totalCompra.innerHTML = "$ 0";
@@ -180,27 +181,55 @@ const calcularTotalCompra = () => {
 
 actualizarCarrito();
 
+// Add products to the cart
+carrito.agregarProducto(producto1);
+carrito.agregarProducto(producto2);
 
-  // Add products to the cart
-  carrito.agregarProducto(producto1);
-  carrito.agregarProducto(producto2);
-
-  // Display the products in the cart
-  console.log("Productos en el carrito:");
-  carrito.productos.forEach((producto) => {
-    console.log(`${producto.nombre} - Precio: $${producto.precio}`);
-  });
+// Display the products in the cart
+console.log("Productos en el carrito:");
+carrito.productos.forEach((producto) => {
+  console.log(`${producto.nombre} - Precio: $${producto.precio}`);
+});
 // Validate age
-let edad = parseInt(prompt("ingrese su edad"));
+let edad = parseInt(document.getElementById("ageInput").value);
 edad = Number(edad);
 
-if (edad >= 18) {
-  alert("Puedes ingresar a la app");
-
-
+if (isNaN(edad) || edad < 0) {
+  document.getElementById("error").innerHTML = "edad invalida";
+} else if (edad >= 18) {
+  document.getElementById("result").innerHTML = "Puedes ingresar a la app";
+  
   // Calculate and display the total of the purchase
   const totalCompra = carrito.calcularTotal();
-  console.log(`Total de la compra: $${totalCompra}`);
+  document.getElementById("total").innerHTML = `Total de la compra: $${totalCompra}`;
 } else {
-  alert("Acceso denegado, eres menor de edad");
+  document.getElementById("result").innerHTML = "Acceso denegado, eres menor de edad";
 }
+
+/// eee this is the code js for the form
+document.getElementById("submit-button").addEventListener("click", function () {
+  let name = document.getElementById("name").value;
+  let email = document.getElementById("email").value;
+  let message = document.getElementById("message").value;
+
+  if (!name || !email || !message) {
+    document.getElementById("message-response").innerText =
+      "Please fill out all fields.";
+    return;
+  }
+
+  // Send the form data to the server here
+
+  document.getElementById("contact-form").reset();
+  document.getElementById("message-response").innerText =
+    "Your message has been sent.";
+});
+
+
+    document.getElementById("error").innerHTML = "";
+    if (1) {
+      
+      const totalCompra = carrito.calcularTotal();
+      document.getElementById("total").innerHTML = `Total de la compra: $${totalCompra}`;
+    } 
+  
