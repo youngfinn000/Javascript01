@@ -233,3 +233,16 @@ document.getElementById("submit-button").addEventListener("click", function () {
       document.getElementById("total").innerHTML = `Total de la compra: $${totalCompra}`;
     } 
   
+
+
+    /// AJAX y FETCH
+    fetch('http://127.0.0.1:5500/index.html')
+  .then(response => response.json())
+  .then(data => {
+    // do something with the data
+    console.log(data);
+  })
+  .catch(error => {
+    // handle any errors
+    console.log(error);
+  });
